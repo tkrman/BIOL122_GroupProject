@@ -74,6 +74,25 @@ ul { list-style: none; }
   mix-blend-mode: screen;
 }
 
+/* ---------- Page-dim overlay ----------
+   This full-screen div sits under everything interactive.
+   When JavaScript adds the "active" class the background
+   property transitions from transparent to a dark tint,
+   making the whole page appear to dim — like the deep ocean
+   going dark before a bioluminescent creature lights up. */
+#add-dim {
+  position: fixed;
+  inset: 0;                            /* cover the whole viewport */
+  background: rgba(0, 10, 20, 0);      /* fully transparent at rest */
+  z-index: 998;                        /* below navbar (1000) and cursor (9999) */
+  pointer-events: none;                /* never blocks mouse/touch events */
+  transition: background 0.35s ease;   /* smooth fade in/out */
+}
+/* The dim level when active — roughly 55% opacity dark ocean overlay */
+#add-dim.active {
+  background: rgba(0, 10, 20, 0.55);
+}
+
 /* ---------- NAVBAR ---------- */
 .navbar {
   position: fixed;
@@ -638,6 +657,21 @@ ul { list-style: none; }
   0%   { box-shadow: 0 0 0 rgba(0,240,255,0); }
   50%  { box-shadow: 0 0 40px rgba(0,240,255,0.7); }
   100% { box-shadow: 0 0 0 rgba(0,240,255,0); }
+}
+
+/* Cart icon glow pulse
+   Fires when an item is added to the cart.
+   Mimics the bioluminescent flash of an anglerfish lure —
+   a soft teal pulse that swells and then gently fades back. */
+@keyframes cart-pulse {
+  0%   { box-shadow: 0 0  4px rgba(0, 240, 255, 0.2); }
+  35%  { box-shadow: 0 0 24px rgba(0, 240, 255, 0.95),
+                     0 0 48px rgba(0, 240, 255, 0.45); }
+  100% { box-shadow: 0 0  4px rgba(0, 240, 255, 0.2); }
+}
+/* JavaScript adds this class to the cart button after each add-to-cart click */
+.cart-btn.cart-pulse {
+  animation: cart-pulse 1.4s ease forwards;
 }
 
 /* ---------- SCROLLBAR ---------- */

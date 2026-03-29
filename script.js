@@ -221,20 +221,41 @@ const cart = (() => {
 
 /* =====================================================
    4. ADD-TO-CART BUTTON LISTENERS
+   Each "Add to Cart" button, when clicked, will:
+     a) add the item to the cart data
+     b) briefly dim the page (deep-sea darkness effect)
+     c) make the cart icon pulse with bioluminescent cyan light
+     d) flash the product card
+     e) show "✓ Added" feedback on the button
+     f) open the cart sidebar
    ===================================================== */
 document.querySelectorAll('.add-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const { name, price } = btn.dataset;
     cart.add(name, price);
 
-    // Flash the parent card
+    // --- (b) Dim the page briefly ---
+    // Like the ocean going dark before a bioluminescent flash
+    const dimEl = document.getElementById('add-dim');
+    dimEl.classList.add('active');           // fade the overlay in
+    setTimeout(() => dimEl.classList.remove('active'), 600); // fade it out after 600 ms
+
+    // --- (c) Pulse the cart icon ---
+    // Remove the class first so repeated clicks restart the animation
+    cartBtn.classList.remove('cart-pulse');
+    void cartBtn.offsetWidth;               // force browser reflow to reset animation
+    cartBtn.classList.add('cart-pulse');
+    // Clean up the class once the animation finishes
+    cartBtn.addEventListener('animationend', () => cartBtn.classList.remove('cart-pulse'), { once: true });
+
+    // --- (d) Flash the parent card ---
     const card = btn.closest('.card');
     card.classList.remove('added-flash');
     void card.offsetWidth; // reflow to restart animation
     card.classList.add('added-flash');
     card.addEventListener('animationend', () => card.classList.remove('added-flash'), { once: true });
 
-    // Brief button feedback
+    // --- (e) Brief button feedback ---
     const orig = btn.textContent;
     btn.textContent = '✓ Added';
     btn.disabled = true;
@@ -243,7 +264,7 @@ document.querySelectorAll('.add-btn').forEach(btn => {
       btn.disabled = false;
     }, 900);
 
-    // Open cart sidebar
+    // --- (f) Open cart sidebar ---
     openCart();
   });
 });
