@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AbyssalShop — Deep Sea Emporium</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Particle canvas for floating bioluminescent particles -->
+  <canvas id="particles"></canvas>
+
+  <!-- Light-trail cursor follower -->
+  <div id="cursor-glow"></div>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">🦑</span>
+      <span class="brand-name">AbyssalShop</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#featured" class="nav-link glow-cyan">Featured</a></li>
+      <li><a href="#deals" class="nav-link glow-green">Deals</a></li>
+      <li><a href="#new-arrivals" class="nav-link glow-purple">New Arrivals</a></li>
+      <li><a href="#low-stock" class="nav-link glow-red">Last Chance</a></li>
+    </ul>
+    <button class="cart-btn" id="cart-btn" aria-label="View cart">
+      <span class="cart-icon">🧺</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </nav>
+
+  <!-- ========== LEGEND ========== -->
+  <section class="legend" aria-label="Color guide">
+    <h2 class="legend-title">🔦 Bioluminescent Signal Guide</h2>
+    <div class="legend-items">
+      <div class="legend-item">
+        <span class="legend-dot dot-cyan"></span>
+        <span>Cyan pulse — Featured / Staff Pick</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-green"></span>
+        <span>Green glow — Great Deal / Discount</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-purple"></span>
+        <span>Violet shimmer — New Arrival</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-red"></span>
+        <span>Red flash — Low Stock / Act Fast</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HERO ========== -->
+  <header class="hero">
+    <div class="hero-text">
+      <h1 class="hero-title">Dive Into the Deep</h1>
+      <p class="hero-subtitle">
+        Follow the light — our bioluminescent signals guide you to the best finds in the abyss.
+      </p>
+      <a href="#featured" class="hero-cta glow-btn-cyan">Explore Now</a>
+    </div>
+    <div class="hero-creature" aria-hidden="true">🐠</div>
+  </header>
+
+  <main>
+
+    <!-- ========== FEATURED ========== -->
+    <section id="featured" class="product-section">
+      <h2 class="section-title glow-cyan">⬡ Featured Picks</h2>
+      <p class="section-desc">Staff-selected. Follow the cyan light.</p>
+      <div class="product-grid">
+
+        <article class="card featured" data-name="Deep-Sea Lantern" data-price="34.99">
+          <div class="card-badge badge-cyan">Staff Pick</div>
+          <div class="card-img" aria-hidden="true">🏮</div>
+          <h3 class="card-title">Deep-Sea Lantern</h3>
+          <p class="card-desc">Authentic bioluminescent lantern harvested from the midnight zone.</p>
+          <div class="card-footer">
+            <span class="card-price">$34.99</span>
+            <button class="add-btn btn-cyan" data-name="Deep-Sea Lantern" data-price="34.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card featured" data-name="Anglerfish Lure" data-price="19.99">
+          <div class="card-badge badge-cyan">Staff Pick</div>
+          <div class="card-img" aria-hidden="true">🎣</div>
+          <h3 class="card-title">Anglerfish Lure</h3>
+          <p class="card-desc">Replica esca that glows in near-total darkness. Mesmerizing.</p>
+          <div class="card-footer">
+            <span class="card-price">$19.99</span>
+            <button class="add-btn btn-cyan" data-name="Anglerfish Lure" data-price="19.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card featured" data-name="Hydrothermal Flask" data-price="27.50">
+          <div class="card-badge badge-cyan">Staff Pick</div>
+          <div class="card-img" aria-hidden="true">🫙</div>
+          <h3 class="card-title">Hydrothermal Flask</h3>
+          <p class="card-desc">Keeps beverages at 380°C. Perfect for the trenches or commute.</p>
+          <div class="card-footer">
+            <span class="card-price">$27.50</span>
+            <button class="add-btn btn-cyan" data-name="Hydrothermal Flask" data-price="27.50">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========== DEALS ========== -->
+    <section id="deals" class="product-section">
+      <h2 class="section-title glow-green">⬡ Today's Deals</h2>
+      <p class="section-desc">Green light means go — grab these savings.</p>
+      <div class="product-grid">
+
+        <article class="card deal" data-name="Kraken Ink Pen" data-price="8.99">
+          <div class="card-badge badge-green">30% Off</div>
+          <div class="card-img" aria-hidden="true">🖊️</div>
+          <h3 class="card-title">Kraken Ink Pen</h3>
+          <p class="card-desc">Writes in real cephalopod ink. Archival quality, haunting hue.</p>
+          <div class="card-footer">
+            <span class="card-price">$8.99 <s class="original-price">$12.99</s></span>
+            <button class="add-btn btn-green" data-name="Kraken Ink Pen" data-price="8.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card deal" data-name="Nautilus Shell Bowl" data-price="22.00">
+          <div class="card-badge badge-green">20% Off</div>
+          <div class="card-img" aria-hidden="true">🐚</div>
+          <h3 class="card-title">Nautilus Shell Bowl</h3>
+          <p class="card-desc">Fibonacci perfection for salad or display. Sustainably sourced.</p>
+          <div class="card-footer">
+            <span class="card-price">$22.00 <s class="original-price">$27.50</s></span>
+            <button class="add-btn btn-green" data-name="Nautilus Shell Bowl" data-price="22.00">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card deal" data-name="Seagrass Tote Bag" data-price="14.99">
+          <div class="card-badge badge-green">Bundle Deal</div>
+          <div class="card-img" aria-hidden="true">🌿</div>
+          <h3 class="card-title">Seagrass Tote Bag</h3>
+          <p class="card-desc">Eco-woven from Pacific seagrass meadows. Buy two, save more.</p>
+          <div class="card-footer">
+            <span class="card-price">$14.99 <s class="original-price">$19.99</s></span>
+            <button class="add-btn btn-green" data-name="Seagrass Tote Bag" data-price="14.99">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========== NEW ARRIVALS ========== -->
+    <section id="new-arrivals" class="product-section">
+      <h2 class="section-title glow-purple">⬡ New Arrivals</h2>
+      <p class="section-desc">Violet shimmer signals the newest additions to our collection.</p>
+      <div class="product-grid">
+
+        <article class="card new-arrival" data-name="Abyssal Perfume" data-price="49.00">
+          <div class="card-badge badge-purple">Just In</div>
+          <div class="card-img" aria-hidden="true">🌸</div>
+          <h3 class="card-title">Abyssal Perfume</h3>
+          <p class="card-desc">Notes of saltwater, sulfur, and midnight. A scent from 3000m down.</p>
+          <div class="card-footer">
+            <span class="card-price">$49.00</span>
+            <button class="add-btn btn-purple" data-name="Abyssal Perfume" data-price="49.00">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card new-arrival" data-name="Coral Reef Print" data-price="31.00">
+          <div class="card-badge badge-purple">Just In</div>
+          <div class="card-img" aria-hidden="true">🪸</div>
+          <h3 class="card-title">Coral Reef Print</h3>
+          <p class="card-desc">18×24 in. giclée of a pristine shallow reef. Vivid bioluminescent palette.</p>
+          <div class="card-footer">
+            <span class="card-price">$31.00</span>
+            <button class="add-btn btn-purple" data-name="Coral Reef Print" data-price="31.00">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card new-arrival" data-name="Cephalopod Plushie" data-price="18.00">
+          <div class="card-badge badge-purple">Just In</div>
+          <div class="card-img" aria-hidden="true">🦑</div>
+          <h3 class="card-title">Cephalopod Plushie</h3>
+          <p class="card-desc">Ultra-soft octopus plushie with color-changing ink-sac feature.</p>
+          <div class="card-footer">
+            <span class="card-price">$18.00</span>
+            <button class="add-btn btn-purple" data-name="Cephalopod Plushie" data-price="18.00">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========== LOW STOCK ========== -->
+    <section id="low-stock" class="product-section">
+      <h2 class="section-title glow-red">⬡ Last Chance</h2>
+      <p class="section-desc">Red flash warns of limited quantity — act before these disappear into the deep.</p>
+      <div class="product-grid">
+
+        <article class="card low-stock" data-name="Vampire Squid Candle" data-price="24.99">
+          <div class="card-badge badge-red">Only 2 Left!</div>
+          <div class="card-img" aria-hidden="true">🕯️</div>
+          <h3 class="card-title">Vampire Squid Candle</h3>
+          <p class="card-desc">Hand-poured with abyssal-zone whale-wax. Burns with blue flame.</p>
+          <div class="card-footer">
+            <span class="card-price">$24.99</span>
+            <button class="add-btn btn-red" data-name="Vampire Squid Candle" data-price="24.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card low-stock" data-name="Midnight Zone Map" data-price="16.50">
+          <div class="card-badge badge-red">Only 3 Left!</div>
+          <div class="card-img" aria-hidden="true">🗺️</div>
+          <h3 class="card-title">Midnight Zone Map</h3>
+          <p class="card-desc">Rare cartographic print of the bathypelagic zone. Hand-numbered edition.</p>
+          <div class="card-footer">
+            <span class="card-price">$16.50</span>
+            <button class="add-btn btn-red" data-name="Midnight Zone Map" data-price="16.50">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="card low-stock" data-name="Glowing Algae Kit" data-price="39.00">
+          <div class="card-badge badge-red">Almost Gone</div>
+          <div class="card-img" aria-hidden="true">🧪</div>
+          <h3 class="card-title">Glowing Algae Kit</h3>
+          <p class="card-desc">Grow your own bioluminescent dinoflagellates at home. Starter kit.</p>
+          <div class="card-footer">
+            <span class="card-price">$39.00</span>
+            <button class="add-btn btn-red" data-name="Glowing Algae Kit" data-price="39.00">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== CART SIDEBAR ========== -->
+  <aside class="cart-sidebar" id="cart-sidebar" role="dialog" aria-modal="true" aria-label="Shopping cart">
+    <div class="cart-header">
+      <h2>Your Cart 🧺</h2>
+      <button class="close-cart" id="close-cart" aria-label="Close cart">✕</button>
+    </div>
+    <ul class="cart-items" id="cart-items">
+      <li class="cart-empty" id="cart-empty">Your cart is as empty as the hadal zone…</li>
+    </ul>
+    <div class="cart-total">
+      <span>Total:</span>
+      <span id="cart-total-price">$0.00</span>
+    </div>
+    <button class="checkout-btn glow-btn-cyan" id="checkout-btn">Checkout</button>
+  </aside>
+  <div class="cart-overlay" id="cart-overlay"></div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <p>🌊 AbyssalShop · Inspired by bioluminescent signaling in deep-sea organisms · BIOL 122 Group Project</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
