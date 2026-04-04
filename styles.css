@@ -1,0 +1,808 @@
+/* ====================================================================
+   AbyssalShop — Bioluminescent Deep-Sea Shopping Page
+   Color-signal system (mirrors deep-sea bioluminescence communication):
+     Cyan   (#00f0ff) → Featured / Staff Pick
+     Green  (#00ff88) → Deals / Discounts
+     Purple (#c77dff) → New Arrivals
+     Red    (#ff4560) → Low Stock / Urgent
+   ==================================================================== */
+
+/* ---------- CSS custom properties ---------- */
+:root {
+  --ocean-darkest: #010b18;
+  --ocean-dark:    #021428;
+  --ocean-mid:     #032440;
+  --ocean-surface: #0a3a5c;
+
+  --cyan:   #00f0ff;
+  --green:  #00ff88;
+  --purple: #c77dff;
+  --red:    #ff4560;
+
+  --cyan-dim:   rgba(0, 240, 255, 0.18);
+  --green-dim:  rgba(0, 255, 136, 0.18);
+  --purple-dim: rgba(199, 125, 255, 0.18);
+  --red-dim:    rgba(255, 69, 96, 0.18);
+
+  --text-primary:   #d0eeff;
+  --text-secondary: #7ab8d4;
+  --text-muted:     #3d7a99;
+
+  --card-bg:    rgba(2, 20, 40, 0.85);
+  --nav-height: 64px;
+
+  --transition: 0.3s ease;
+  --glow-spread: 12px;
+}
+
+/* ---------- Reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+
+
+  background: linear-gradient(
+    to bottom,
+    var(--ocean-surface) 0%,
+    var(--ocean-mid) 25%,
+    var(--ocean-dark) 60%,
+    var(--ocean-darkest) 100%
+  );
+
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none; /* custom cursor handled in JS */
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* ---------- Particle canvas (background) ---------- */
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- Cursor glow ---------- */
+#cursorGlow {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,240,255,0.55) 0%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transition: width 0.15s, height 0.15s, background 0.15s;
+  mix-blend-mode: screen;
+}
+
+/* ---------- Page-dim overlay ----------
+   This full-screen div sits under everything interactive.
+   When JavaScript adds the "active" class the background
+   property transitions from transparent to a dark tint,
+   making the whole page appear to dim — like the deep ocean
+   going dark before a bioluminescent creature lights up. */
+#addDim {
+  position: fixed;
+  inset: 0;                            /* cover the whole viewport */
+  background: rgba(0, 10, 20, 0);      /* fully transparent at rest */
+  z-index: 998;                        /* below navbar (1000) and cursor (9999) */
+  pointer-events: none;                /* never blocks mouse/touch events */
+  transition: background 0.35s ease;   /* smooth fade in/out */
+}
+/* The dim level when active — roughly 55% opacity dark ocean overlay */
+#addDim.active {
+  background: rgba(0, 10, 20, 0.55);
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 👈 change this */
+
+  padding: 0 2rem;
+  background: rgba(1, 11, 24, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.navbarHome {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--cyan);
+  text-shadow: 0 0 14px var(--cyan);
+}
+
+
+.navLinks {
+  position: absolute; /* 👈 KEY */
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 1.5rem;
+}
+.navLink {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.navLink.featuredNav   { color: var(--cyan);   }
+.navLink.dealsNav  { color: var(--green);  }
+.navLink.newNav { color: var(--purple); }
+.navLink.lowStockNav    { color: var(--red);    }
+
+.navLink.featuredNav:hover   { background: var(--cyan-dim);   text-shadow: 0 0 10px var(--cyan);   }
+.navLink.dealsNav:hover  { background: var(--green-dim);  text-shadow: 0 0 10px var(--green);  }
+.navLink.newNav:hover { background: var(--purple-dim); text-shadow: 0 0 10px var(--purple); }
+.navLink.lowStockNav:hover    { background: var(--red-dim);    text-shadow: 0 0 10px var(--red);    }
+
+/* Cart button */
+.cartButton {
+  position: fixed; /* KEY CHANGE */
+  top: 12px;
+  right: 24px;
+  z-index: 1300; /* above sidebar */
+
+  background: var(--cyan-dim);
+  border: 1px solid var(--cyan);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 1.1rem;
+  cursor: none;
+  color: var(--text-primary);
+  transition: var(--transition), right 0.35s ease; /* animate movement */
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.cartButton:hover {
+  background: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 14px var(--cyan);
+}
+
+.cartCount {
+  font-size: 0.75rem;
+  background: var(--cyan);
+  color: var(--ocean-darkest);
+  border-radius: 999px;
+  padding: 0 6px;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+}
+
+
+/* ---------- Page Headers ---------- */
+.pageHeaders {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5rem 4rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.pageHeadersContainer { max-width: 540px; }
+
+.pageHeadersTitle {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--cyan);
+  text-shadow: 0 0 24px var(--cyan), 0 0 60px rgba(0,240,255,0.3);
+  margin-bottom: 1rem;
+}
+
+.pageHeadersSubtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+
+/* ---------- Glow buttons ---------- */
+.cyanAddButton, .checkoutButton {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  border: 2px solid var(--cyan);
+  background: var(--cyan-dim);
+  color: var(--cyan);
+  cursor: none;
+  transition: var(--transition);
+  text-shadow: 0 0 8px var(--cyan);
+  box-shadow: 0 0 14px rgba(0,240,255,0.25);
+}
+
+.cyanAddButton:hover, .checkoutButton:hover {
+  background: var(--cyan);
+  color: var(--ocean-darkest);
+  box-shadow: 0 0 28px var(--cyan), inset 0 0 10px rgba(255,255,255,0.1);
+  text-shadow: none;
+}
+
+/* ---------- PRODUCT SECTIONS ---------- */
+.products {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+  padding: 0 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3rem;
+}
+.sectionTitle.cyanSection   { color: var(--cyan);   text-shadow: 0 0 18px var(--cyan);   }
+.sectionTitle.greenSection  { color: var(--green);  text-shadow: 0 0 18px var(--green);  }
+.sectionTitle.purpleSection { color: var(--purple); text-shadow: 0 0 18px var(--purple); }
+.sectionTitle.redSection    { color: var(--red);    text-shadow: 0 0 18px var(--red);    }
+
+
+.productSelection {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ---------- PRODUCT CARDS ---------- */
+.product {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 1.4rem;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  overflow: hidden;
+}
+
+/* Ambient inner glow (pseudo-element) */
+.product::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  opacity: 0;
+  transition: opacity var(--transition);
+  pointer-events: none;
+}
+
+/* Per-category card colors */
+.product.featured::before     { background: radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.12) 0%, transparent 70%); }
+.product.deals::before         { background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.12) 0%, transparent 70%); }
+.product.new::before  { background: radial-gradient(ellipse at 50% 0%, rgba(199,125,255,0.12) 0%, transparent 70%); }
+.product.lowStock::before    { background: radial-gradient(ellipse at 50% 0%, rgba(255,69,96,0.12) 0%, transparent 70%); }
+
+.product:hover::before { opacity: 1; }
+
+.product.featured    { border-color: rgba(0,240,255,0.2); }
+.product.deals        { border-color: rgba(0,255,136,0.2); }
+.product.new { border-color: rgba(199,125,255,0.2); }
+.product.lowStock   { border-color: rgba(255,69,96,0.2); }
+
+.product.featured:hover    { box-shadow: 0 0 28px rgba(0,240,255,0.35),   0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
+.product.deals:hover        { box-shadow: 0 0 28px rgba(0,255,136,0.35),   0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
+.product.new:hover { box-shadow: 0 0 28px rgba(199,125,255,0.35), 0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
+.product.lowStock:hover   { box-shadow: 0 0 28px rgba(255,69,96,0.35),   0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
+
+/* Badge */
+.productTag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+.cyanTag   { background: var(--cyan-dim);   color: var(--cyan);   border: 1px solid var(--cyan);   box-shadow: 0 0 8px rgba(0,240,255,0.4);   }
+.greenTag  { background: var(--green-dim);  color: var(--green);  border: 1px solid var(--green);  box-shadow: 0 0 8px rgba(0,255,136,0.4);   }
+.purpleTag { background: var(--purple-dim); color: var(--purple); border: 1px solid var(--purple); box-shadow: 0 0 8px rgba(199,125,255,0.4); }
+.redTag    { background: var(--red-dim);    color: var(--red);    border: 1px solid var(--red);    box-shadow: 0 0 8px rgba(255,69,96,0.4);   }
+
+/* Card image / emoji */
+.productImg {
+  font-size: 3rem;
+  text-align: center;
+  margin: 0.4rem 0;
+  filter: drop-shadow(0 0 10px rgba(0,240,255,0.3));
+  transition: filter var(--transition), transform var(--transition);
+}
+.product.deals        .productImg { filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
+.product.new .productImg { filter: drop-shadow(0 0 10px rgba(199,125,255,0.3)); }
+.product.lowStock   .productImg { filter: drop-shadow(0 0 10px rgba(255,69,96,0.3)); }
+
+.product:hover .productImg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 22px rgba(0,240,255,0.7));
+}
+.product.deal:hover        .productImg { filter: drop-shadow(0 0 22px rgba(0,255,136,0.7)); }
+.product.new:hover .productImg { filter: drop-shadow(0 0 22px rgba(199,125,255,0.7)); }
+.product.lowStock:hover   .productImg { filter: drop-shadow(0 0 22px rgba(255,69,96,0.7)); }
+
+.productTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.productDescription {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.productFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.productCost {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.originalCost {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 0.3rem;
+}
+
+/* Add-to-cart buttons */
+.addButton {
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid;
+  cursor: none;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.cyanButton {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--cyan-dim);
+}
+.cyanButton:hover {
+  background: var(--cyan);
+  color: var(--ocean-darkest);
+  box-shadow: 0 0 16px var(--cyan);
+}
+
+.greenButton {
+  border-color: var(--green);
+  color: var(--green);
+  background: var(--green-dim);
+}
+.greenButton:hover {
+  background: var(--green);
+  color: var(--ocean-darkest);
+  box-shadow: 0 0 16px var(--green);
+}
+
+.purpleButton {
+  border-color: var(--purple);
+  color: var(--purple);
+  background: var(--purple-dim);
+}
+.purpleButton:hover {
+  background: var(--purple);
+  color: var(--ocean-darkest);
+  box-shadow: 0 0 16px var(--purple);
+}
+
+.redButton {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-dim);
+}
+.redButton:hover {
+  background: var(--red);
+  color: var(--ocean-darkest);
+  box-shadow: 0 0 16px var(--red);
+}
+
+/* "Added!" flash on card */
+.product.addedFlash {
+  animation: addedFlash 0.5s ease;
+}
+
+/* ---------- lowStock badge pulse ---------- */
+.product.lowStock .productTag {
+  animation: pulseRed 1.5s ease-in-out infinite;
+}
+
+/* ---------- CART SIDEBAR ---------- */
+.cartOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.cartOverlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.cartSidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(400px, 92vw);
+  z-index: 1200;
+  background: rgba(2, 20, 40, 0.97);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(0,240,255,0.25);
+  box-shadow: -8px 0 40px rgba(0,240,255,0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1rem;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cartSidebar.open {
+  transform: translateX(0);
+}
+
+.cartSidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cartSidebarHeader h2 {
+  font-size: 1.2rem;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan);
+}
+
+.closeCartButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+.closeCartButton:hover {
+  color: var(--red);
+  text-shadow: 0 0 8px var(--red);
+}
+
+.cartItems {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cartEmpty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+.cartItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,240,255,0.05);
+  border: 1px solid rgba(0,240,255,0.12);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  gap: 0.5rem;
+}
+
+.cart-item-name { flex: 1; color: var(--text-primary); }
+.cart-item-qty  { color: var(--text-muted); font-size: 0.78rem; }
+.cart-item-price { color: var(--cyan); font-weight: 700; }
+
+.removeItem {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: none;
+  font-size: 0.9rem;
+  padding: 0 0.25rem;
+  transition: var(--transition);
+}
+.removeItem:hover { color: var(--red); text-shadow: 0 0 6px var(--red); }
+
+.cartTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-top: 1px solid rgba(0,240,255,0.15);
+  padding-top: 0.75rem;
+}
+#cartTotalCost { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
+
+.checkoutButton {
+  width: 100%;
+  text-align: center;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(0,240,255,0.08);
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%       { transform: translateY(-18px) rotate(3deg); }
+}
+
+@keyframes pulseCyan {
+  0%, 100% { box-shadow: 0 0 6px var(--cyan);  opacity: 1; }
+  50%       { box-shadow: 0 0 18px var(--cyan); opacity: 0.7; }
+}
+@keyframes pulseGreen {
+  0%, 100% { box-shadow: 0 0 6px var(--green);  opacity: 1; }
+  50%       { box-shadow: 0 0 18px var(--green); opacity: 0.7; }
+}
+@keyframes pulsePurple {
+  0%, 100% { box-shadow: 0 0 6px var(--purple);  opacity: 1; }
+  50%       { box-shadow: 0 0 18px var(--purple); opacity: 0.7; }
+}
+@keyframes pulseRed {
+  0%, 100% { box-shadow: 0 0 6px var(--red),  opacity: 1; }
+  50%       { box-shadow: 0 0 20px var(--red); opacity: 0.6; }
+}
+
+@keyframes addedFlash {
+  0%   { box-shadow: 0 0 0 rgba(0,240,255,0); }
+  50%  { box-shadow: 0 0 40px rgba(0,240,255,0.7); }
+  100% { box-shadow: 0 0 0 rgba(0,240,255,0); }
+}
+
+/* Cart icon glow pulse
+   Fires when an item is added to the cart.
+   Mimics the bioluminescent flash of an anglerfish lure —
+   a soft teal pulse that swells and then gently fades back. */
+
+/*
+@keyframes productPulse {
+  0%   { box-shadow: 0 0  4px rgba(0, 240, 255, 0.2); }
+  35%  { box-shadow: 0 0 24px rgba(0, 240, 255, 0.95),
+                     0 0 48px rgba(0, 240, 255, 0.45); }
+  100% { box-shadow: 0 0  4px rgba(0, 240, 255, 0.2); }
+}
+*/
+
+
+
+/* JavaScript adds this class to the cart button after each add-to-cart click */
+
+/* ---------- SCROLLBAR ---------- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ocean-darkest); }
+::-webkit-scrollbar-thumb { background: var(--ocean-surface); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 680px) {
+  .navLinks { display: none; }
+  .pageHeaders { flex-direction: column; padding: 5rem 1.5rem 2rem; }
+  .products { padding: 0 1rem; }
+}
+
+
+/* =====================================================
+   SIGNAL SYSTEM ENHANCEMENTS
+   ===================================================== */
+
+/* ---------- Ambient pulse (base life effect) ---------- */
+@keyframes ambientPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255,255,255,0.05); }
+  50%      { box-shadow: 0 0 14px rgba(255,255,255,0.08); }
+}
+
+.product {
+  animation: ambientPulse 6s ease-in-out infinite;
+}
+
+/* ---------- Category-based signal pulsing ---------- */
+.product.featured {
+  animation: pulseCyan 3s ease-in-out infinite;
+}
+
+.product.deals {
+  animation: pulseGreen 2.2s ease-in-out infinite;
+}
+
+.product.new {
+  animation: pulsePurple 3.8s ease-in-out infinite;
+}
+
+.product.lowStock {
+  animation: pulseRed 1.4s ease-in-out infinite;
+}
+
+/* ---------- Button glow pulse ---------- */
+.addButton {
+  position: relative;
+  overflow: hidden;
+}
+
+.addButton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+}
+
+.cyanButton::after   { box-shadow: 0 0 12px var(--cyan); }
+.greenButton::after  { box-shadow: 0 0 12px var(--green); }
+.purpleButton::after { box-shadow: 0 0 12px var(--purple); }
+.redButton::after    { box-shadow: 0 0 12px var(--red); }
+
+.addButton:hover::after {
+  opacity: 1;
+  animation: ambientPulse 1.2s ease-in-out infinite;
+}
+
+/* =====================================================
+   LIGHT THEME
+   ===================================================== */
+
+body.light {
+  --ocean-darkest: #f4fbff;
+  --ocean-dark:    #e6f6ff;
+  --ocean-mid:     #d6efff;
+  --ocean-surface: #c2e6ff;
+
+  --text-primary:   #0a1a2a;
+  --text-secondary: #355a75;
+  --text-muted:     #6b8ca3;
+
+  --card-bg: rgba(255,255,255,0.85);
+
+  --cyan-dim:   rgba(0, 240, 255, 0.12);
+  --green-dim:  rgba(0, 255, 136, 0.12);
+  --purple-dim: rgba(199, 125, 255, 0.12);
+  --red-dim:    rgba(255, 69, 96, 0.12);
+}
+
+
+
+@keyframes sunburstRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg); /* counter-clockwise */
+  }
+}
+
+
+
+/* Light mode structural fixes */
+body.light .navbar {
+  background: rgba(255,255,255,0.85);
+}
+
+body.light .cartSidebar {
+  background: rgba(255,255,255,0.95);
+}
+
+body.light .product {
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+
+.product.deals::after {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    rgba(0,255,136,0.0) 0deg,
+    rgba(0,255,136,0.15) 40deg,
+    rgba(0,255,136,0.35) 90deg,
+    rgba(0,255,136,0.15) 140deg,
+    rgba(0,255,136,0.0) 180deg,
+    rgba(0,255,136,0.15) 220deg,
+    rgba(0,255,136,0.35) 270deg,
+    rgba(0,255,136,0.15) 320deg,
+    rgba(0,255,136,0.0) 360deg
+  );
+  border-radius: 50%;
+  z-index: 0;
+  opacity: 0.6;
+  filter: blur(40px);
+  animation: sunburstRotate 10s linear infinite;
+  pointer-events: none;
+}
+
+
+@keyframes cartIdlePulse {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(0, 240, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(0, 240, 255, 1),
+                0 0 40px rgba(0, 240, 255, 0.6);
+  }
+}
+
+.cartButton.idlePulse {
+  animation: cartIdlePulse 0.6s ease-in-out infinite;
+}
+
+.cartButton.glowLow {
+  box-shadow: 0 0 10px var(--cyan);
+}
+
+.cartButton.glowMid {
+  box-shadow: 0 0 20px var(--green);
+}
+
+.cartButton.glowHigh {
+  box-shadow: 0 0 30px var(--red);
+}

@@ -1,0 +1,228 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Gizmo Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <canvas id="particles" width="718" height="848"></canvas>
+
+ 
+  <div id="cursorGlow" style="left: 714px; top: 33px; background: radial-gradient(circle, rgba(0, 240, 255, 0.55) 0%, transparent 70%); width: 28px; height: 28px;"></div>
+
+  <div id="addDim"></div>
+
+  <nav class="navbar">
+    <div class="navHome">      
+      <span class="gizmoTitle">The Gizmo Store</span>
+    </div>
+    <ul class="navLinks">
+      <li><a href="#featured" class="navLink featuredNav">Featured</a></li>
+      <li><a href="#deals" class="navLink dealsNav">Deals</a></li>
+      <li><a href="#new" class="navLink newNav">New Arrivals</a></li>
+      <li><a href="#lowStock" class="navLink lowStockNav">Last Chance</a></li>
+    </ul>
+    <button class="cartButton" id="cartButton" aria-label="View cart">
+      <span class="cartCount" id="cartCount">0</span>
+    </button>
+  </nav>
+
+  <header class="pageHeaders">
+    <div class="pageHeadersContainer">
+      <h1 class="pageHeadersTitle">The Gizmo Store</h1>
+      <p class="pageHeadersSubtitle">We sell high quality doohickeys and gadgets!</p>
+      
+    </div>
+    
+  </header>
+
+  <main>
+
+    <section id="featured" class="products">
+      <h2 class="cyanSection sectionTitle">Most Popular</h2>
+      
+      <div class="productSelection">
+
+        <article class="product featured" data-name="Cool lighter" data-price="34.99">
+          <div class="productTag cyanTag">Staff Pick</div>
+          <div class="productImg" aria-hidden="true">🚬</div>
+          <h3 class="productTitle">Cool lighter</h3>
+          <p class="productDescription">Offer someone a light in these trying times</p>
+          <div class="productFooter">
+            <span class="productCost">$34.99</span>
+            <button class="addButton cyanButton" data-name="Cool lighter" data-price="34.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product featured" data-name="Hamburger" data-price="19.99">
+          <div class="productTag cyanTag">Staff Pick</div>
+          <div class="productImg" aria-hidden="true">🍔</div>
+          <h3 class="productTitle">Hamburger</h3>
+          <p class="productDescription">Now with 10% more preservatives and artifical sweeteners!</p>
+          <div class="productFooter">
+            <span class="productCost">$19.99</span>
+            <button class="addButton cyanButton" data-name="Hamburger" data-price="19.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product featured" data-name="Partially Eaten Pickle" data-price="27.50">
+          <div class="productTag cyanTag">Staff Pick</div>
+          <div class="productImg" aria-hidden="true">🥒</div>
+          <h3 class="productTitle">Partially Eaten Pickle</h3>
+          <p class="productDescription">It still has like 4 bites left!</p>
+          <div class="productFooter">
+            <span class="productCost">$27.50</span>
+            <button class="addButton cyanButton" data-name="Partially Eaten Pickle" data-price="27.50">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="deals" class="products">
+      <h2 class="greenSection sectionTitle">Deals</h2>
+      <div class="productSelection">
+	  
+        <article class="product deals" data-name="Pirated VHS Copy of The Mask" data-price="8.99">
+          <div class="productTag greenTag">30% Off</div>
+          <div class="productImg" aria-hidden="true">📼️</div>
+          <h3 class="productTitle">Pirated VHS Copy of The Mask</h3>
+          <p class="productDescription">Somebody stop me.</p>
+          <div class="productFooter">
+            <span class="productCost">$8.99 <s class="original-price">$12.99</s></span>
+            <button class="addButton greenButton" data-name="Pirated VHS Copy of The Mask" data-price="8.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product deals" data-name="Hal 9000" data-price="22.00">
+          <div class="productTag greenTag">20% Off</div>
+          <div class="productImg" aria-hidden="true">🖲️</div>
+          <h3 class="productTitle">Hal 9000</h3>
+          <p class="productDescription">Something something AI bad something something.</p>
+          <div class="productFooter">
+            <span class="productCost">$22.00 <s class="original-price">$27.50</s></span>
+            <button class="addButton greenButton" data-name="Hal 9000" data-price="22.00">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product deals" data-name="Mythical Rolled Up Newspaper With +20 Crit Damage" data-price="14.99">
+          <div class="productTag greenTag">Bundle Deal</div>
+          <div class="productImg" aria-hidden="true">🗞️</div>
+          <h3 class="productTitle">Mythical Rolled Up Newspaper With +20 Crit Damage</h3>
+          <p class="productDescription">NO! BAD!</p>
+          <div class="productFooter">
+            <span class="productCost">$14.99 <s class="original-price">$19.99</s></span>
+            <button class="addButton greenButton" data-name="Mythical Rolled Up Newspaper With +20 Crit Damage" data-price="14.99">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="new" class="products">
+      <h2 class="purpleSection sectionTitle">New Gizmos</h2>
+      
+      <div class="productSelection">
+
+        <article class="product new" data-name="Stupid Talking Paperclip" data-price="49.00">
+          <div class="productTag purpleTag">Just In</div>
+          <div class="productImg" aria-hidden="true">📎</div>
+          <h3 class="productTitle">Stupid Talking Paperclip</h3>
+          <p class="productDescription">No take backsies</p>
+          <div class="productFooter">
+            <span class="productCost">$49.00</span>
+            <button class="addButton purpleButton" data-name="Stupid Talking Paperclip" data-price="49.00">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product new" data-name="Evil Crystal Orb" data-price="31.00">
+          <div class="productTag purpleTag">Just In</div>
+          <div class="productImg" aria-hidden="true">🔮</div>
+          <h3 class="productTitle">Evil Crytal Orb</h3>
+          <p class="productDescription">Doxxes people.</p>
+          <div class="productFooter">
+            <span class="productCost">$31.00</span>
+            <button class="addButton purpleButton" data-name="Evil Crystal Orb" data-price="31.00">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product new" data-name="Slot Machine" data-price="18.00">
+          <div class="productTag purpleTag">Just In</div>
+          <div class="productImg" aria-hidden="true">🎰</div>
+          <h3 class="productTitle">Slot Machine</h3>
+          <p class="productDescription">Most gambling addicts quit before they're about to hit it big</p>
+          <div class="productFooter">
+            <span class="productCost">$18.00</span>
+            <button class="addButton purpleButton" data-name="Slot Machine" data-price="18.00">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="lowStock" class="products">
+      <h2 class="redSection sectionTitle">Don't Miss Out</h2>
+      
+      <div class="productSelection">
+
+        <article class="product lowStock" data-name="Gear" data-price="24.99">
+          <div class="productTag redTag">Only 2 Left!</div>
+          <div class="productImg" aria-hidden="true">⚙️</div>
+          <h3 class="productTitle">Gear</h3>
+          <p class="productDescription">Ancient tool of the long lost clockmaker tribe</p>
+          <div class="productFooter">
+            <span class="productCost">$24.99</span>
+            <button class="addButton redButton" data-name="Gear" data-price="24.99">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product lowStock" data-name="An immortal snail" data-price="16.50">
+          <div class="productTag redTag">Only 3 Left!</div>
+          <div class="productImg" aria-hidden="true">🐌</div>
+          <h3 class="productTitle">An immortal snail</h3>
+          <p class="productDescription">Will grant you immortality but will try to kill you for eternity.</p>
+          <div class="productFooter">
+            <span class="productCost">$16.50</span>
+            <button class="addButton redButton" data-name="An immortal snail" data-price="16.50">Add to Cart</button>
+          </div>
+        </article>
+
+        <article class="product lowStock" data-name="Toxic Green Glowing Sludge" data-price="39.00">
+          <div class="productTag redTag">Almost Gone</div>
+          <div class="productImg" aria-hidden="true">🧪</div>
+          <h3 class="productTitle">Toxic Green Glowing Sludge</h3>
+          <p class="productDescription">If you are reading this you have already lost 10 years of your life.</p>
+          <div class="productFooter">
+            <span class="productCost">$39.00</span>
+            <button class="addButton redButton" data-name="Glowing Algae Kit" data-price="39.00">Add to Cart</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="cartSidebar" id="cartSidebar" role="dialog" aria-modal="true" aria-label="Shopping cart">
+    <div class="cartSidebarHeader">
+      <h2>Your Cart</h2>
+      <button class="closeCartButton" id="closeCartButton" aria-label="Close cart">✕</button>
+    </div>
+    <ul class="cartItems" id="cartItems">
+      <li class="cartEmpty" id="cartEmpty">No gizmos... :(</li>
+    </ul>
+    <div class="cartTotal">
+      <span>Total:</span>
+      <span id="cartTotalCost">$0.00</span>
+    </div>
+    <button class="checkoutButton" id="checkoutButton">Checkout</button>
+  </aside>
+  <div class="cartOverlay" id="cartOverlay"></div>
+
+  <footer class="footer">
+    <p>BIOL 122 Group Project</p>
+  </footer>
+  <script src="script.js"></script>
+</body></html>
