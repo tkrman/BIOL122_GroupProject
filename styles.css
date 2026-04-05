@@ -1,13 +1,3 @@
-/* ====================================================================
-   AbyssalShop — Bioluminescent Deep-Sea Shopping Page
-   Color-signal system (mirrors deep-sea bioluminescence communication):
-     Cyan   (#00f0ff) → Featured / Staff Pick
-     Green  (#00ff88) → Deals / Discounts
-     Purple (#c77dff) → New Arrivals
-     Red    (#ff4560) → Low Stock / Urgent
-   ==================================================================== */
-
-/* ---------- CSS custom properties ---------- */
 :root {
   --ocean-darkest: #010b18;
   --ocean-dark:    #021428;
@@ -35,7 +25,6 @@
   --glow-spread: 12px;
 }
 
-/* ---------- Reset & base ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -61,7 +50,6 @@ body {
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
-/* ---------- Particle canvas (background) ---------- */
 #particles {
   position: fixed;
   inset: 0;
@@ -69,7 +57,6 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* ---------- Cursor glow ---------- */
 #cursorGlow {
   position: fixed;
   width: 28px;
@@ -83,12 +70,6 @@ ul { list-style: none; }
   mix-blend-mode: screen;
 }
 
-/* ---------- Page-dim overlay ----------
-   This full-screen div sits under everything interactive.
-   When JavaScript adds the "active" class the background
-   property transitions from transparent to a dark tint,
-   making the whole page appear to dim — like the deep ocean
-   going dark before a bioluminescent creature lights up. */
 #addDim {
   position: fixed;
   inset: 0;                            /* cover the whole viewport */
@@ -97,12 +78,11 @@ ul { list-style: none; }
   pointer-events: none;                /* never blocks mouse/touch events */
   transition: background 0.35s ease;   /* smooth fade in/out */
 }
-/* The dim level when active — roughly 55% opacity dark ocean overlay */
+
 #addDim.active {
   background: rgba(0, 10, 20, 0.55);
 }
 
-/* ---------- NAVBAR ---------- */
 .navbar {
   position: fixed;
   top: 0;
@@ -113,7 +93,7 @@ ul { list-style: none; }
 
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* 👈 change this */
+  justify-content: flex-start; 
 
   padding: 0 2rem;
   background: rgba(1, 11, 24, 0.85);
@@ -134,7 +114,7 @@ ul { list-style: none; }
 
 
 .navLinks {
-  position: absolute; /* 👈 KEY */
+  position: absolute; 
   left: 50%;
   transform: translateX(-50%);
 
@@ -155,18 +135,32 @@ ul { list-style: none; }
 .navLink.newNav { color: var(--purple); }
 .navLink.lowStockNav    { color: var(--red);    }
 
-.navLink.featuredNav:hover   { background: var(--cyan-dim);   text-shadow: 0 0 10px var(--cyan);   }
-.navLink.dealsNav:hover  { background: var(--green-dim);  text-shadow: 0 0 10px var(--green);  }
-.navLink.newNav:hover { background: var(--purple-dim); text-shadow: 0 0 10px var(--purple); }
-.navLink.lowStockNav:hover    { background: var(--red-dim);    text-shadow: 0 0 10px var(--red);    }
+.navLink.featuredNav:hover   
+{ 
+   background: var(--cyan-dim);  
+   text-shadow: 0 0 10px var(--cyan);   
+}
+.navLink.dealsNav:hover  
+{ 
+   background: var(--green-dim);  
+   text-shadow: 0 0 10px var(--green);  
+}
+.navLink.newNav:hover 
+{ 
+   background: var(--purple-dim);
+   text-shadow: 0 0 10px var(--purple); 
+}
+.navLink.lowStockNav:hover    
+{ 
+   background: var(--red-dim);    
+   text-shadow: 0 0 10px var(--red);    
+}
 
-/* Cart button */
 .cartButton {
-  position: fixed; /* KEY CHANGE */
+  position: fixed; 
   top: 12px;
   right: 24px;
-  z-index: 1300; /* above sidebar */
-
+  z-index: 1300; 
   background: var(--cyan-dim);
   border: 1px solid var(--cyan);
   border-radius: 8px;
@@ -174,11 +168,12 @@ ul { list-style: none; }
   font-size: 1.1rem;
   cursor: none;
   color: var(--text-primary);
-  transition: var(--transition), right 0.35s ease; /* animate movement */
+  transition: var(--transition), right 0.35s ease; 
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
+
 .cartButton:hover {
   background: rgba(0, 240, 255, 0.3);
   box-shadow: 0 0 14px var(--cyan);
@@ -195,8 +190,6 @@ ul { list-style: none; }
   text-align: center;
 }
 
-
-/* ---------- Page Headers ---------- */
 .pageHeaders {
   position: relative;
   z-index: 1;
@@ -227,8 +220,6 @@ ul { list-style: none; }
   margin-bottom: 2rem;
 }
 
-
-/* ---------- Glow buttons ---------- */
 .cyanAddButton, .checkoutButton {
   display: inline-block;
   padding: 0.75rem 2rem;
@@ -252,7 +243,6 @@ ul { list-style: none; }
   text-shadow: none;
 }
 
-/* ---------- PRODUCT SECTIONS ---------- */
 .products {
   position: relative;
   z-index: 1;
@@ -267,11 +257,29 @@ ul { list-style: none; }
   letter-spacing: 0.06em;
   margin-bottom: 0.3rem;
 }
-.sectionTitle.cyanSection   { color: var(--cyan);   text-shadow: 0 0 18px var(--cyan);   }
-.sectionTitle.greenSection  { color: var(--green);  text-shadow: 0 0 18px var(--green);  }
-.sectionTitle.purpleSection { color: var(--purple); text-shadow: 0 0 18px var(--purple); }
-.sectionTitle.redSection    { color: var(--red);    text-shadow: 0 0 18px var(--red);    }
 
+.sectionTitle.cyanSection   
+{ 
+   color: var(--cyan);   
+   text-shadow: 0 0 18px var(--cyan);   
+}
+
+.sectionTitle.greenSection  
+{ 
+   color: var(--green);  
+   text-shadow: 0 0 18px var(--green);  
+}
+
+.sectionTitle.purpleSection 
+{ 
+   color: var(--purple); 
+   text-shadow: 0 0 18px var(--purple); 
+}
+.sectionTitle.redSection    
+{ 
+   color: var(--red);    
+   text-shadow: 0 0 18px var(--red);    
+}
 
 .productSelection {
   display: grid;
@@ -279,7 +287,6 @@ ul { list-style: none; }
   gap: 1.5rem;
 }
 
-/* ---------- PRODUCT CARDS ---------- */
 .product {
   position: relative;
   background: var(--card-bg);
@@ -293,8 +300,8 @@ ul { list-style: none; }
   overflow: hidden;
 }
 
-/* Ambient inner glow (pseudo-element) */
-.product::before {
+.product::before 
+{
   content: '';
   position: absolute;
   inset: 0;
@@ -304,25 +311,40 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* Per-category card colors */
 .product.featured::before     { background: radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.12) 0%, transparent 70%); }
 .product.deals::before         { background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.12) 0%, transparent 70%); }
 .product.new::before  { background: radial-gradient(ellipse at 50% 0%, rgba(199,125,255,0.12) 0%, transparent 70%); }
 .product.lowStock::before    { background: radial-gradient(ellipse at 50% 0%, rgba(255,69,96,0.12) 0%, transparent 70%); }
-
 .product:hover::before { opacity: 1; }
-
 .product.featured    { border-color: rgba(0,240,255,0.2); }
 .product.deals        { border-color: rgba(0,255,136,0.2); }
 .product.new { border-color: rgba(199,125,255,0.2); }
 .product.lowStock   { border-color: rgba(255,69,96,0.2); }
 
-.product.featured:hover    { box-shadow: 0 0 28px rgba(0,240,255,0.35),   0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
-.product.deals:hover        { box-shadow: 0 0 28px rgba(0,255,136,0.35),   0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
-.product.new:hover { box-shadow: 0 0 28px rgba(199,125,255,0.35), 0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
-.product.lowStock:hover   { box-shadow: 0 0 28px rgba(255,69,96,0.35),   0 8px 32px rgba(0,0,0,0.5); transform: translateY(-4px); }
+.product.featured:hover    
+{ 
+ box-shadow: 0 0 28px rgba(0,240,255,0.35),   0 8px 32px rgba(0,0,0,0.5); 
+ transform: translateY(-4px); 
+}
 
-/* Badge */
+.product.deals:hover        
+{ 
+   box-shadow: 0 0 28px rgba(0,255,136,0.35),   0 8px 32px rgba(0,0,0,0.5); 
+   transform: translateY(-4px); 
+}
+
+.product.new:hover 
+{
+   box-shadow: 0 0 28px rgba(199,125,255,0.35), 0 8px 32px rgba(0,0,0,0.5); 
+   transform: translateY(-4px); 
+}
+
+.product.lowStock:hover   
+{ 
+   box-shadow: 0 0 28px rgba(255,69,96,0.35),   0 8px 32px rgba(0,0,0,0.5); 
+   transform: translateY(-4px); 
+}
+
 .productTag {
   position: absolute;
   top: 1rem;
@@ -334,12 +356,39 @@ ul { list-style: none; }
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
 }
-.cyanTag   { background: var(--cyan-dim);   color: var(--cyan);   border: 1px solid var(--cyan);   box-shadow: 0 0 8px rgba(0,240,255,0.4);   }
-.greenTag  { background: var(--green-dim);  color: var(--green);  border: 1px solid var(--green);  box-shadow: 0 0 8px rgba(0,255,136,0.4);   }
-.purpleTag { background: var(--purple-dim); color: var(--purple); border: 1px solid var(--purple); box-shadow: 0 0 8px rgba(199,125,255,0.4); }
-.redTag    { background: var(--red-dim);    color: var(--red);    border: 1px solid var(--red);    box-shadow: 0 0 8px rgba(255,69,96,0.4);   }
 
-/* Card image / emoji */
+.cyanTag   
+{ 
+   background: var(--cyan-dim);   
+   color: var(--cyan);   
+   border: 1px solid var(--cyan);   
+   box-shadow: 0 0 8px rgba(0,240,255,0.4);   
+}
+
+.greenTag  
+{ 
+   background: var(--green-dim);  
+   color: var(--green);  
+   border: 1px solid var(--green); 
+   box-shadow: 0 0 8px rgba(0,255,136,0.4);  
+}
+
+.purpleTag 
+{ 
+ background: var(--purple-dim); 
+ color: var(--purple); 
+ border: 1px solid var(--purple); 
+ box-shadow: 0 0 8px rgba(199,125,255,0.4); 
+}
+
+.redTag    
+{ 
+   background: var(--red-dim);
+   color: var(--red);    
+   border: 1px solid var(--red);    
+   box-shadow: 0 0 8px rgba(255,69,96,0.4);   
+}
+
 .productImg {
   font-size: 3rem;
   text-align: center;
@@ -347,17 +396,19 @@ ul { list-style: none; }
   filter: drop-shadow(0 0 10px rgba(0,240,255,0.3));
   transition: filter var(--transition), transform var(--transition);
 }
-.product.deals        .productImg { filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
+
+.product.deals .productImg { filter: drop-shadow(0 0 10px rgba(0,255,136,0.3)); }
 .product.new .productImg { filter: drop-shadow(0 0 10px rgba(199,125,255,0.3)); }
-.product.lowStock   .productImg { filter: drop-shadow(0 0 10px rgba(255,69,96,0.3)); }
+.product.lowStock .productImg { filter: drop-shadow(0 0 10px rgba(255,69,96,0.3)); }
 
 .product:hover .productImg {
   transform: scale(1.1);
   filter: drop-shadow(0 0 22px rgba(0,240,255,0.7));
 }
-.product.deal:hover        .productImg { filter: drop-shadow(0 0 22px rgba(0,255,136,0.7)); }
+
+.product.deal:hover .productImg { filter: drop-shadow(0 0 22px rgba(0,255,136,0.7)); }
 .product.new:hover .productImg { filter: drop-shadow(0 0 22px rgba(199,125,255,0.7)); }
-.product.lowStock:hover   .productImg { filter: drop-shadow(0 0 22px rgba(255,69,96,0.7)); }
+.product.lowStock:hover .productImg { filter: drop-shadow(0 0 22px rgba(255,69,96,0.7)); }
 
 .productTitle {
   font-size: 1rem;
@@ -392,7 +443,6 @@ ul { list-style: none; }
   margin-left: 0.3rem;
 }
 
-/* Add-to-cart buttons */
 .addButton {
   padding: 0.45rem 1rem;
   border-radius: 6px;
@@ -449,17 +499,14 @@ ul { list-style: none; }
   box-shadow: 0 0 16px var(--red);
 }
 
-/* "Added!" flash on card */
 .product.addedFlash {
   animation: addedFlash 0.5s ease;
 }
 
-/* ---------- lowStock badge pulse ---------- */
 .product.lowStock .productTag {
   animation: pulseRed 1.5s ease-in-out infinite;
 }
 
-/* ---------- CART SIDEBAR ---------- */
 .cartOverlay {
   position: fixed;
   inset: 0;
@@ -581,7 +628,6 @@ ul { list-style: none; }
   text-align: center;
 }
 
-/* ---------- FOOTER ---------- */
 .footer {
   position: relative;
   z-index: 1;
@@ -592,7 +638,6 @@ ul { list-style: none; }
   border-top: 1px solid rgba(0,240,255,0.08);
 }
 
-/* ---------- ANIMATIONS ---------- */
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(-3deg); }
   50%       { transform: translateY(-18px) rotate(3deg); }
@@ -621,43 +666,25 @@ ul { list-style: none; }
   100% { box-shadow: 0 0 0 rgba(0,240,255,0); }
 }
 
-/* Cart icon glow pulse
-   Fires when an item is added to the cart.
-   Mimics the bioluminescent flash of an anglerfish lure —
-   a soft teal pulse that swells and then gently fades back. */
-
-/*
 @keyframes productPulse {
   0%   { box-shadow: 0 0  4px rgba(0, 240, 255, 0.2); }
   35%  { box-shadow: 0 0 24px rgba(0, 240, 255, 0.95),
                      0 0 48px rgba(0, 240, 255, 0.45); }
   100% { box-shadow: 0 0  4px rgba(0, 240, 255, 0.2); }
 }
-*/
 
 
-
-/* JavaScript adds this class to the cart button after each add-to-cart click */
-
-/* ---------- SCROLLBAR ---------- */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--ocean-darkest); }
 ::-webkit-scrollbar-thumb { background: var(--ocean-surface); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
-/* ---------- RESPONSIVE ---------- */
 @media (max-width: 680px) {
   .navLinks { display: none; }
   .pageHeaders { flex-direction: column; padding: 5rem 1.5rem 2rem; }
   .products { padding: 0 1rem; }
 }
 
-
-/* =====================================================
-   SIGNAL SYSTEM ENHANCEMENTS
-   ===================================================== */
-
-/* ---------- Ambient pulse (base life effect) ---------- */
 @keyframes ambientPulse {
   0%, 100% { box-shadow: 0 0 6px rgba(255,255,255,0.05); }
   50%      { box-shadow: 0 0 14px rgba(255,255,255,0.08); }
@@ -667,7 +694,6 @@ ul { list-style: none; }
   animation: ambientPulse 6s ease-in-out infinite;
 }
 
-/* ---------- Category-based signal pulsing ---------- */
 .product.featured {
   animation: pulseCyan 3s ease-in-out infinite;
 }
@@ -684,7 +710,6 @@ ul { list-style: none; }
   animation: pulseRed 1.4s ease-in-out infinite;
 }
 
-/* ---------- Button glow pulse ---------- */
 .addButton {
   position: relative;
   overflow: hidden;
@@ -708,10 +733,6 @@ ul { list-style: none; }
   animation: ambientPulse 1.2s ease-in-out infinite;
 }
 
-/* =====================================================
-   LIGHT THEME
-   ===================================================== */
-
 body.light {
   --ocean-darkest: #f4fbff;
   --ocean-dark:    #e6f6ff;
@@ -730,8 +751,6 @@ body.light {
   --red-dim:    rgba(255, 69, 96, 0.12);
 }
 
-
-
 @keyframes sunburstRotate {
   from {
     transform: rotate(0deg);
@@ -741,9 +760,6 @@ body.light {
   }
 }
 
-
-
-/* Light mode structural fixes */
 body.light .navbar {
   background: rgba(255,255,255,0.85);
 }
