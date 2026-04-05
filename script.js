@@ -1,10 +1,3 @@
-/**
- * SignalShop — script.js (FIXED)
- */
-
-/* =====================================================
-   1. AMBIENT PARTICLES
-   ===================================================== */
 (function initParticles() {
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
@@ -78,9 +71,6 @@
   animate();
 })();
 
-/* =====================================================
-   2. CURSOR
-   ===================================================== */
 (function initCursor() {
   const glow = document.getElementById('cursorGlow');
   let mx = -100, my = -100;
@@ -102,9 +92,6 @@
   tick();
 })();
 
-/* =====================================================
-   3. CART
-   ===================================================== */
 const sidebar = document.getElementById('cartSidebar');
 const overlay = document.getElementById('cartOverlay');
 const cartButton = document.getElementById('cartButton');
@@ -196,9 +183,6 @@ const cart = (() => {
   return { add };
 })();
 
-/* =====================================================
-   4. ADD BUTTONS
-   ===================================================== */
 document.querySelectorAll('.addButton').forEach(btn => {
   btn.addEventListener('click', () => {
     const { name, price } = btn.dataset;
@@ -212,9 +196,6 @@ document.querySelectorAll('.addButton').forEach(btn => {
   });
 });
 
-/* =====================================================
-   5. SIDEBAR
-   ===================================================== */
 function openCart() {
   sidebar.classList.add('open');
   overlay.classList.add('active');
